@@ -19,7 +19,7 @@ RUN docker-php-ext-install pdo_pgsql
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Enable Apache modules
-RUN a2enmod rewrite
+RUN a2ensite 000-default && service apache2 restart
 
 # Expose port 80 to allow incoming connections to the container
 EXPOSE 80

@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
   php-apache:
@@ -9,13 +9,26 @@ services:
       - "80:80"
     volumes:
       - .:/var/www/html
+    environment:
+      - HOST=${HOST}
+      - PORT=${PORT}
+      - DBNAME=${DBNAME}
+      - USER=${USERNAME}
+      - PASSWORD=${PASSWORD}
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:latest
     environment:
-      POSTGRES_USER: myuser
-      POSTGRES_PASSWORD: mypassword
-      POSTGRES_DB: mydb
+      POSTGRES_USER: ${USERNAME}
+      POSTGRES_PASSWORD: ${PASSWORD}
+      POSTGRES_DB: ${DBNAME}
     ports:
-      - "5432:5432"
-
+      - "${PORT}:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${USERNAME}", "-d", "${DBNAME}"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+      timeout: 5s
