@@ -1,22 +1,40 @@
 <?php
+// Set CORS headers for all origins
 header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
-    $method = $_SERVER['REQUEST_METHOD'];
+header('Content-Type: application/json');
 
-    if ($method === 'OPTIONS') {
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-        header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
-        exit();
-    }
+$database = new Database();
+$db = $database->connect();
 
-    echo json_encode(array(
+// Handle pre-flight CORS requests (OPTIONS)
+$method = $_SERVER['REQUEST_METHOD'];
+
+if ($method === 'OPTIONS') {
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
+    exit();
+}
+
+// Instantiate Database class and connect
+require_once 'Database.php'; // Make sure to include your Database class file
+include_once '../../config/Database.php';
+
+
+
+// Handle other request methods, for example, GET
+if ($method === 'GET') {
+    // Sample response data (could be replaced by actual DB query)
+    $data = array(
         'status' => 'success',
-        'message' => 'CORS headers set successfully.',
-        'method' => $method,
-        'headers' => getallheaders()
-    ));
+        'message' => 'This is a GET request response.',
+        'method' => 'GET',
+        'data' => array('example' => 'value') // Replace with actual data from DB
+    );
 
-    // Instantiate DB & connect
-    $database = new Database();
-    $db = $database->connect();
-    ?>
+    // Return the response as JSON
+    echo json_encode($data);
+}
+
+
+
+?>
