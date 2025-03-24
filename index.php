@@ -16,7 +16,6 @@ if ($method === 'OPTIONS') {
 }
 
 // Instantiate Database class and connect
-require_once 'Database.php'; // Make sure to include your Database class file
 include_once '../../config/Database.php';
 
 
