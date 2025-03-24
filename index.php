@@ -5,7 +5,7 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 // Include database connection and models
-require_once 'Database.php';
+require_once __DIR__ . 'config/Database.php'; 
 require_once 'Quote.php';
 require_once 'Author.php';
 require_once 'Category.php';
