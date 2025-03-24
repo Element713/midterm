@@ -6,9 +6,10 @@ header('Content-Type: application/json');
 
 // Include database connection and models
 require_once __DIR__ . '/config/Database.php'; 
-require_once 'Quote.php';
-require_once 'Author.php';
-require_once 'Category.php';
+require_once __DIR__ . '/models/Quote.php';
+require_once __DIR__ . '/models/Author.php';
+require_once __DIR__ . '/models/Category.php';
+
 
 // Instantiate database
 $database = new Database();
