@@ -7,7 +7,6 @@ class Database {
     //db c onnect
     public function connect() {
         $host = getenv('HOST');
-        $port = getenv('PORT');
         $db_name = getenv('DBNAME');
         $username = getenv('USERNAME');
         $password = getenv('PASSWORD');
