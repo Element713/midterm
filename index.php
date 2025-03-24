@@ -15,4 +15,8 @@ header('Access-Control-Allow-Origin: *');
         'method' => $method,
         'headers' => getallheaders()
     ));
+
+    // Instantiate DB & connect
+    $database = new Database();
+    $db = $database->connect();
     ?>
