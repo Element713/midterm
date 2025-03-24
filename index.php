@@ -15,3 +15,4 @@ header('Access-Control-Allow-Origin: *');
         'method' => $method,
         'headers' => getallheaders()
     ));
+    ?>
