@@ -9,3 +9,13 @@ services:
       - "80:80"
     volumes:
       - .:/var/www/html
+
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+
