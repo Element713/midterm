@@ -18,12 +18,7 @@
     // Get row count
     $num = $result->rowCount();
 
-    // Check if any authors
-    if ($num > 0) {
-        // Author array
-        $authors_arr = array();
-        $authors_arr['data'] = array();
-
+    
         // Fetch authors
         while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
             extract($row);
