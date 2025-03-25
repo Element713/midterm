@@ -8,7 +8,7 @@ header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
         exit();
     }
-    
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
@@ -28,6 +28,6 @@ if ($method === 'GET' && preg_match('/\/$authors/', $request_uri)) {
     echo json_encode(["message" => "catagories added successfully"]);
 } else {
     http_response_code(404);
-    echo json_encode(["message" => "Route not found"]);
+    echo json_encode(["message" => "Route not found authors"]);
 }
 ?>

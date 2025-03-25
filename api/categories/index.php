@@ -18,6 +18,6 @@ if ($method === 'GET' && preg_match('/\/$catagories/', $request_uri)) {
     echo json_encode(["message" => "catagories added successfully"]);
 } else {
     http_response_code(404);
-    echo json_encode(["message" => "Route not found"]);
+    echo json_encode(["message" => "Route not found catagories"]);
 }
 ?>
