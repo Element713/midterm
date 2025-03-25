@@ -34,3 +34,4 @@ class Category {
         return $stmt;
     }
 }
+?>

@@ -23,4 +23,3 @@ RUN a2ensite 000-default && service apache2 restart
 
 # Expose port 80 to allow incoming connections to the container
 EXPOSE 80
-

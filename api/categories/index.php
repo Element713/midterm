@@ -8,3 +8,4 @@ header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
         exit();
     }
+    ?>
