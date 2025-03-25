@@ -9,7 +9,7 @@ Access-Control-Allow-Methods,Authorization,X-Requested-With');
 include_once '../../config/Database.php';
 include_once '../../models/Quote.php';
 
-echo json_encode(['message' => 'test']);
+
 // Instantiate DB & connect
 $database = new Database();
 $db = $database->connect();
