@@ -1,43 +1,43 @@
 <?php
-// Include database and Quote class files
+// Include database and category class files
 include_once '../../config/Database.php';
-include_once '../../models/Quote.php';
+include_once '../../models/Category.php';
 
 // Instantiate DB and connect
 $database = new Database();
 $db = $database->connect();
 
-// Instantiate Quote object
-$quote = new Quote($db);
+// Instantiate category object
+$category = new category($db);
 
-// Read quotes from database
-$stmt = $quote->read();  // This should return a PDO statement
+// Read categorys from database
+$stmt = $category->read();  // This should return a PDO statement
 
-// Check if any quotes were found
+// Check if any categorys were found
 if ($stmt && $stmt->rowCount() > 0) {
-    // Prepare the quotes array
-    $quotes_arr = array();
-    $quotes_arr['data'] = array();
+    // Prepare the categorys array
+    $category_arr = array();
+    $category_arr['data'] = array();
 
-    // Fetch all quotes
+    // Fetch all categorys
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $quote_item = array(
+        $category_item = array(
             'id' => $row['id'],
-            'quote' => $row['quote'],
+            'category' => $row['category'],
             'author_name' => $row['author_name'],
             'category_name' => $row['category_name']
         );
 
-        // Push to quotes data array
-        array_push($quotes_arr['data'], $quote_item);
+        // Push to categorys data array
+        array_push($category_arr['data'], $category_item);
     }
 
     // Return the result as JSON
-    echo json_encode($quotes_arr);
+    echo json_encode($category_arr);
 } else {
-    // No quotes found
+    // No categorys found
     echo json_encode(
-        array('message' => 'No quotes found.')
+        array('message' => 'No category found.')
     );
 }
 ?>
