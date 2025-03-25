@@ -1,23 +1,50 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
+    header('Content-Type: application/json');
+    $method = $_SERVER['REQUEST_METHOD'];
 
-$method = $_SERVER['REQUEST_METHOD'];
-$request_uri = $_SERVER['REQUEST_URI']; // Get the request path
+    if ($method === 'OPTIONS') {
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+        header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
+        exit();
+    }
+    
+// Include necessary files
+include_once '../../config/Database.php';
+include_once '../../models/Category.php';
 
-if ($method === 'OPTIONS') {
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-    header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
-    exit();
-}
+// Instantiate DB & connect
+$database = new Database();
+$db = $database->connect();
 
-// Define basic routing
-if ($method === 'GET' && preg_match('/\/$catagories/', $request_uri)) {
-    echo json_encode(["catagories" => ["catagories 1", "catagories 2", "catagories 3"]]);
-} elseif ($method === 'POST' && preg_match('/\/$catagories/', $request_uri)) {
-    echo json_encode(["message" => "catagories added successfully"]);
-} else {
-    http_response_code(404);
-    echo json_encode(["message" => "Route not found catagories"]);
+// Instantiate category object
+$category = new Category($db);
+
+// Handle different HTTP methods
+switch ($method) {
+    case 'GET':
+        // If there's an ID in the query string, fetch the single category
+        if (isset($_GET['id'])) {
+            include_once 'read_single.php'; // Fetch single category
+        } else {
+            include_once 'read.php'; // Fetch all categories
+        }
+        break;
+    
+    case 'POST':
+        include_once 'create.php'; // Create a new category
+        break;
+
+    case 'PUT':
+        include_once 'update.php'; // Update an existing category
+        break;
+    
+    case 'DELETE':
+        include_once 'delete.php'; // Delete a category
+        break;
+
+    default:
+        echo json_encode(array('message' => 'Method Not Allowed'));
+        break;
 }
 ?>

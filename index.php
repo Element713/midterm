@@ -1,100 +1,43 @@
 <?php
-
-// Set CORS headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
+header("Access-Control-Allow-Credentials: true");
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+header("X-Frame-Options: DENY");
+header("X-XSS-Protection: 1; mode=block");
+header("X-Content-Type-Options: nosniff");
 
-// Include database connection and models
-require_once __DIR__ . '/config/Database.php'; 
-require_once __DIR__ . '/models/Quote.php';
-require_once __DIR__ . '/models/Author.php';
-require_once __DIR__ . '/models/Category.php';
+$method = $_SERVER['REQUEST_METHOD'];
 
+if ($method === 'OPTIONS') {
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
+    exit();
+}
 
-// Instantiate database
+// Load dependencies
+require 'vendor/autoload.php';
+require_once 'config/database.php';
+
+// Establish database connection
 $database = new Database();
 $db = $database->connect();
 
-// Get the HTTP request method
-$method = $_SERVER['REQUEST_METHOD'];
-$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// Handle Routing
+$request_uri = strtok($_SERVER['REQUEST_URI'], '?'); // Removes query parameters
 
-// Check for API route and handle accordingly
-if (strpos($uri, '/quotes') === 0) {
-    // Route to handle quotes
-    $quoteApi = new Quote($db);
-    handleQuotes($quoteApi, $method, $uri);
-} elseif (strpos($uri, '/authors') === 0) {
-    // Route to handle authors
-    $authorApi = new Author($db);
-    handleAuthors($authorApi, $method, $uri);
-} elseif (strpos($uri, '/categories') === 0) {
-    // Route to handle categories
-    $categoryApi = new Category($db);
-    handleCategories($categoryApi, $method, $uri);
-} else {
-    echo json_encode(['message' => 'Route not found']);
+switch ($request_uri) {
+    case '/quotes':
+        require 'routes/quotes.php';
+        break;
+    case '/authors':
+        require 'routes/authors.php';
+        break;
+    case '/categories':
+        require 'routes/categories.php';
+        break;
+    default:
+        http_response_code(404);
+        echo json_encode(['message' => 'Endpoint not found']);
+        break;
 }
-
-// Helper functions to handle different routes
-function handleQuotes($quoteApi, $method, $uri) {
-    if ($method === 'GET') {
-        if (isset($_GET['id'])) {
-            $quoteApi->getQuoteById($_GET['id']);
-        } elseif (isset($_GET['author_id'])) {
-            $quoteApi->getQuotesByAuthorId($_GET['author_id']);
-        } elseif (isset($_GET['category_id'])) {
-            $quoteApi->getQuotesByCategoryId($_GET['category_id']);
-        } else {
-            $quoteApi->getAllQuotes();
-        }
-    } elseif ($method === 'POST') {
-        // Handle quote creation
-        $quoteApi->createQuote($_POST);
-    } elseif ($method === 'PUT') {
-        // Handle quote update
-        $quoteApi->updateQuote($_PUT);
-    } elseif ($method === 'DELETE') {
-        // Handle quote deletion
-        $quoteApi->deleteQuote($_GET['id']);
-    }
-}
-
-function handleAuthors($authorApi, $method, $uri) {
-    if ($method === 'GET') {
-        if (isset($_GET['id'])) {
-            $authorApi->getAuthorById($_GET['id']);
-        } else {
-            $authorApi->getAllAuthors();
-        }
-    } elseif ($method === 'POST') {
-        // Handle author creation
-        $authorApi->createAuthor($_POST);
-    } elseif ($method === 'PUT') {
-        // Handle author update
-        $authorApi->updateAuthor($_PUT);
-    } elseif ($method === 'DELETE') {
-        // Handle author deletion
-        $authorApi->deleteAuthor($_GET['id']);
-    }
-}
-
-function handleCategories($categoryApi, $method, $uri) {
-    if ($method === 'GET') {
-        if (isset($_GET['id'])) {
-            $categoryApi->getCategoryById($_GET['id']);
-        } else {
-            $categoryApi->getAllCategories();
-        }
-    } elseif ($method === 'POST') {
-        // Handle category creation
-        $categoryApi->createCategory($_POST);
-    } elseif ($method === 'PUT') {
-        // Handle category update
-        $categoryApi->updateCategory($_PUT);
-    } elseif ($method === 'DELETE') {
-        // Handle category deletion
-        $categoryApi->deleteCategory($_GET['id']);
-    }
-}
-?>

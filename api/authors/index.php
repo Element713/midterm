@@ -8,26 +8,42 @@ header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
         exit();
     }
+    
+include_once '../../config/Database.php';
+include_once '../../models/Author.php';
 
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
+// Instantiate DB & connect
+$database = new Database();
+$db = $database->connect();
 
-$method = $_SERVER['REQUEST_METHOD'];
-$request_uri = $_SERVER['REQUEST_URI']; // Get the request path
+// Instantiate author object
+$author = new Author($db);
 
-if ($method === 'OPTIONS') {
-    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-    header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
-    exit();
-}
+// Handle different HTTP methods
+switch ($method) {
+    case 'GET':
+        // If there's an ID in the query string, fetch the single author
+        if (isset($_GET['id'])) {
+            include_once 'read_single.php'; // Fetch single author
+        } else {
+            include_once 'read.php'; // Fetch all authors
+        }
+        break;
+    
+    case 'POST':
+        include_once 'create.php'; // Create a new author
+        break;
 
-// Define basic routing
-if ($method === 'GET' && preg_match('/\/$authors/', $request_uri)) {
-    echo json_encode(["authors" => ["authors 1", "authors 2", "authors 3"]]);
-} elseif ($method === 'POST' && preg_match('/\/$authors/', $request_uri)) {
-    echo json_encode(["message" => "catagories added successfully"]);
-} else {
-    http_response_code(404);
-    echo json_encode(["message" => "Route not found authors"]);
+    case 'PUT':
+        include_once 'update.php'; // Update an existing author
+        break;
+    
+    case 'DELETE':
+        include_once 'delete.php'; // Delete an author
+        break;
+
+    default:
+        echo json_encode(array('message' => 'Method Not Allowed'));
+        break;
 }
 ?>
