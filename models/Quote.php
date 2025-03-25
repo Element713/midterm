@@ -11,7 +11,7 @@ class Quote {
     public $category_name;
     public $author_id;
     public $author_name;
-    public $created_at;
+
 
     // Constructor with DB 
     public function __construct($db) {

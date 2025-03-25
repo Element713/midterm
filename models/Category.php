@@ -6,8 +6,7 @@ class Category {
 
     // Properties
     public $id;
-    public $name;
-    public $created_at;
+    public $catagory;
 
     // Constructor with DB 
     public function __construct($db) {
@@ -17,7 +16,7 @@ class Category {
     // Get all categories
     public function read() {
         // Create query to fetch all categories
-        $query = 'SELECT id, name FROM ' . $this->table . ' ORDER BY created_at DESC';
+        $query = 'SELECT id, name FROM ' . $this->table . ' ORDER BY id DESC';
 
         try {
             // Prepare statement
@@ -34,7 +33,7 @@ class Category {
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $categories[] = [
                         'id' => $row['id'],
-                        'name' => $row['name']
+                        'catagory' => $row['catagory']
                     ];
                 }
 
@@ -69,11 +68,11 @@ class Category {
 
                 // Set properties
                 $this->id = $row['id'];
-                $this->name = $row['name'];
+                $this->catagory = $row['catagory'];
 
                 return [
                     'id' => $this->id,
-                    'name' => $this->name
+                    'catagory' => $this->catagory
                 ];
             }
 
@@ -86,21 +85,21 @@ class Category {
     // Create a new category (POST request)
     public function create() {
         // Query to insert a new category
-        $query = 'INSERT INTO ' . $this->table . ' SET name = :name';
+        $query = 'INSERT INTO ' . $this->table . ' SET catagory = :catagory';
 
         try {
             // Prepare statement
             $stmt = $this->conn->prepare($query);
 
             // Sanitize and bind the name parameter
-            $this->name = htmlspecialchars(strip_tags($this->name));
-            $stmt->bindParam(':name', $this->name);
+            $this->catagory = htmlspecialchars(strip_tags($this->catagory));
+            $stmt->bindParam(':catagory', $this->catagory);
 
             // Execute query
             if ($stmt->execute()) {
                 return [
                     'id' => $this->conn->lastInsertId(),
-                    'name' => $this->name
+                    'catagory' => $this->catagory
                 ];
             }
 
@@ -114,22 +113,22 @@ class Category {
     // Update a category (PUT request)
     public function update() {
         // Query to update a category
-        $query = 'UPDATE ' . $this->table . ' SET name = :name WHERE id = :id';
+        $query = 'UPDATE ' . $this->table . ' SET catagory = :catagory WHERE id = :id';
 
         try {
             // Prepare statement
             $stmt = $this->conn->prepare($query);
 
             // Sanitize and bind parameters
-            $this->name = htmlspecialchars(strip_tags($this->name));
-            $stmt->bindParam(':name', $this->name);
+            $this->catagory = htmlspecialchars(strip_tags($this->catagory));
+            $stmt->bindParam(':catagory', $this->catagory);
             $stmt->bindParam(':id', $this->id);
 
             // Execute query
             if ($stmt->execute()) {
                 return [
                     'id' => $this->id,
-                    'name' => $this->name
+                    'catagory' => $this->catagory
                 ];
             }
 

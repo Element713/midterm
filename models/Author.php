@@ -6,7 +6,7 @@ class Author {
 
     // Properties
     public $id;
-    public $name;
+    public $author;
 
     // Constructor
     public function __construct($db) {
@@ -33,7 +33,7 @@ class Author {
                 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $authors[] = [
                         'id' => $row['id'],
-                        'name' => $row['name']
+                        'author' => $row['author']
                     ];
                 }
                 
@@ -69,11 +69,11 @@ class Author {
 
                 // Set properties
                 $this->id = $row['id'];
-                $this->name = $row['name'];
+                $this->author = $row['author'];
 
                 return [
                     'id' => $this->id,
-                    'name' => $this->name
+                    'author' => $this->author
                 ]; // Return the author data
             }
 
@@ -87,21 +87,21 @@ class Author {
     // Add a new author (for POST requests)
     public function create() {
         // Query to insert a new author
-        $query = 'INSERT INTO ' . $this->table . ' SET name = :name';
+        $query = 'INSERT INTO ' . $this->table . ' SET author = :author';
 
         try {
             // Prepare statement
             $stmt = $this->conn->prepare($query);
 
             // Sanitize and bind parameters
-            $this->name = htmlspecialchars(strip_tags($this->name));
-            $stmt->bindParam(':name', $this->name);
+            $this->author = htmlspecialchars(strip_tags($this->author));
+            $stmt->bindParam(':author', $this->author);
 
             // Execute query
             if ($stmt->execute()) {
                 return [
                     'id' => $this->conn->lastInsertId(),
-                    'name' => $this->name
+                    'author' => $this->author
                 ];
             }
 
@@ -115,22 +115,22 @@ class Author {
     // Update an existing author (for PUT requests)
     public function update() {
         // Query to update an author
-        $query = 'UPDATE ' . $this->table . ' SET name = :name WHERE id = :id';
+        $query = 'UPDATE ' . $this->table . ' SET author = :author WHERE id = :id';
 
         try {
             // Prepare statement
             $stmt = $this->conn->prepare($query);
 
             // Sanitize and bind parameters
-            $this->name = htmlspecialchars(strip_tags($this->name));
-            $stmt->bindParam(':name', $this->name);
+            $this->author = htmlspecialchars(strip_tags($this->author));
+            $stmt->bindParam(':author', $this->author);
             $stmt->bindParam(':id', $this->id);
 
             // Execute query
             if ($stmt->execute()) {
                 return [
                     'id' => $this->id,
-                    'name' => $this->name
+                    'author' => $this->author
                 ];
             }
 
