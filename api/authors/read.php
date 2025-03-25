@@ -1,45 +1,49 @@
 <?php
-    // Headers
-    header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
+// Headers
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json');
 
-    include_once '../../config/Database.php';
-    include_once '../../models/Author.php';
+// Include database and author files
+include_once '../../config/Database.php';
+include_once '../../models/Author.php';
 
-    // Instantiate DB & connect
-    $database = new Database();
-    $db = $database->connect();
+// Instantiate DB & connect
+$database = new Database();
+$db = $database->connect();
 
-    // Instantiate author object
-    $author = new Author($db);
+// Instantiate author object
+$author = new Author($db);
 
-    // Fetch all authors
-    $result = $author->read();
-    // Get row count
-    $num = $result->rowCount();
+// Fetch all authors
+$result = $author->read();
 
-    
-        // Fetch authors
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            extract($row);
+// Check if the result is valid and has rows
+if ($result && $result->rowCount() > 0) {
+    // Initialize the array for authors
+    $authors_arr = array();
+    $authors_arr['data'] = array();
 
-            // Create author item
-            $author_item = array(
-                'id' => $id,
-                'name' => $name // assuming the column is 'name'
-            );
+    // Fetch authors
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        // Extract data from the row
+        extract($row);
 
-            // Push to "data"
-            array_push($authors_arr['data'], $author_item);
-        }
-
-        // Turn to JSON & output
-        echo json_encode($authors_arr);
-
-    } else {
-        // No authors found
-        echo json_encode(
-            array('message' => 'No Authors Found')
+        // Create author item
+        $author_item = array(
+            'id' => $id,
+            'name' => $name // assuming the column is 'name'
         );
+
+        // Push to "data" array
+        array_push($authors_arr['data'], $author_item);
     }
+
+    // Return authors in JSON format
+    echo json_encode($authors_arr);
+} else {
+    // No authors found
+    echo json_encode(
+        array('message' => 'No Authors Found')
+    );
+}
 ?>
