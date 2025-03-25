@@ -28,22 +28,20 @@ if ($num > 0) {
         extract($row);
 
         $quote_item = array(
-            'id' => $id,
-            'quote' => html_entity_decode($quote),  
-            'author' => $author,                    
-            'category' => $category_name                    
+            'id' => isset($id) ? $id : null,
+            'quote' => isset($quote) ? html_entity_decode($quote) : null,
+            'author' => isset($author_name) ? $author_name : 'Unknown Author',
+            'category' => isset($category_name) ? $category_name :
+'Uncategorized'
         );
 
-        // Push to "data"
-        array_push($quotes_arr['data'], $quote_item);
+        array_push($quotes_arr, $quote_item);
     }
 
-    // Set response code and output JSON
-    http_response_code(200);
+    // output JSON
     echo json_encode($quotes_arr);
 } else {
-    // No Quote Found
-    http_response_code(404);
+    // No Quotes Found - Return an empty array
     echo json_encode(array('message' => 'No Quotes Found'));
 }
 ?>
