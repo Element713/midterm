@@ -34,5 +34,4 @@ $e->getMessage()]));
         }
     }
 }
-echo "Database connection established successfully.";
 ?>

@@ -1,25 +1,24 @@
 <?php
-class Quote{
-	// DB Stuff
-	private $conn;
-	private $table = 'quotes';
+class Quote {
+    // DB Stuff
+    private $conn;
+    private $table = 'quotes';
 
-	// Quote Properties
-	public $id;
-	public $quote;
+    // Quote Properties
+    public $id;
+    public $quote;
     public $category_id;
-	public $category_name;
+    public $category_name;
     public $author_id;
-	public $author_name;
-	public $created_at;
-    
+    public $author_name;
+    public $created_at;
 
-	// Constructor with DB 
-	public function __construct($db) {
-		$this->conn = $db;
-	}
+    // Constructor with DB 
+    public function __construct($db) {
+        $this->conn = $db;
+    }
 
-    // Get Quotes
+    // Get all Quotes
     public function read() {
         // Create query
         $query = 'SELECT 
@@ -36,13 +35,27 @@ class Quote{
         $stmt = $this->conn->prepare($query);
 
         // Execute query
-        $stmt->execute();
+        try {
+            $stmt->execute();
+            $quotes = [];
 
-        return $stmt;
+            // Fetch results
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $quotes[] = [
+                    'id' => $row['id'],
+                    'quote' => $row['quote'],
+                    'author_name' => $row['author_name'],
+                    'category_name' => $row['category_name']
+                ];
+            }
+
+            return $quotes;
+        } catch (PDOException $e) {
+            return ["message" => "Database Error: " . $e->getMessage()];
+        }
     }
 
-
-    // Get Single Quote
+    // Get a single Quote
     public function read_single() {
         // Create query
         $query = 'SELECT 
@@ -63,18 +76,27 @@ class Quote{
         $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
 
         // Execute query
-        $stmt->execute();
+        try {
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Fetch result
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                // Set properties
+                $this->quote = $row['quote'];
+                $this->author_name = $row['author_name'];
+                $this->category_name = $row['category_name'];
 
-        if ($row) {
-            // Set properties
-            $this->quote = $row['quote'];
-            $this->author_name = $row['author_name'];
-            $this->category_name = $row['category_name'];
-        } else {
-            return false;  // Quote not found
+                return [
+                    'id' => $this->id,
+                    'quote' => $this->quote,
+                    'author_name' => $this->author_name,
+                    'category_name' => $this->category_name
+                ];
+            }
+
+            return ['message' => 'Quote not found'];
+        } catch (PDOException $e) {
+            return ["message" => "Database Error: " . $e->getMessage()];
         }
     }
 
@@ -100,13 +122,21 @@ class Quote{
         $stmt->bindParam(':category_id', $this->category_id, PDO::PARAM_INT);
 
         // Execute query
-        if ($stmt->execute()) {
-            return true;
+        try {
+            if ($stmt->execute()) {
+                return [
+                    'message' => 'Quote created successfully',
+                    'id' => $this->conn->lastInsertId(),
+                    'quote' => $this->quote,
+                    'author_id' => $this->author_id,
+                    'category_id' => $this->category_id
+                ];
+            }
+        } catch (PDOException $e) {
+            return ["message" => "Database Error: " . $e->getMessage()];
         }
 
-        // Print error if something goes wrong
-        printf("Error: %s.\n", $stmt->error);
-        return false;
+        return ['message' => 'Failed to create quote'];
     }
 
     // Update Quote
@@ -134,13 +164,21 @@ class Quote{
         $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
 
         // Execute query
-        if ($stmt->execute()) {
-            return true;
+        try {
+            if ($stmt->execute()) {
+                return [
+                    'message' => 'Quote updated successfully',
+                    'id' => $this->id,
+                    'quote' => $this->quote,
+                    'author_id' => $this->author_id,
+                    'category_id' => $this->category_id
+                ];
+            }
+        } catch (PDOException $e) {
+            return ["message" => "Database Error: " . $e->getMessage()];
         }
 
-        // Print error if something goes wrong
-        printf("Error: %s.\n", $stmt->error);
-        return false;
+        return ['message' => 'Failed to update quote'];
     }
 
     // Delete Quote
@@ -158,14 +196,15 @@ class Quote{
         $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
 
         // Execute query
-        if ($stmt->execute()) {
-            return true;
+        try {
+            if ($stmt->execute()) {
+                return ['message' => 'Quote deleted successfully'];
+            }
+        } catch (PDOException $e) {
+            return ["message" => "Database Error: " . $e->getMessage()];
         }
 
-        // Print error if something goes wrong
-        printf("Error: %s.\n", $stmt->error);
-        return false;
+        return ['message' => 'Failed to delete quote'];
     }
 }
-
 ?>
