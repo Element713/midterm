@@ -23,7 +23,6 @@ $num = $result->rowCount();
 if ($num > 0) {
     // Quote array
     $quotes_arr = array();
-    $quotes_arr['data'] = array();
 
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
@@ -32,8 +31,7 @@ if ($num > 0) {
             'id' => $id,
             'quote' => html_entity_decode($quote),  
             'author' => $author,                    
-            'category' => $category_name,           
-            'category_id' => $category_id          
+            'category' => $category_name                    
         );
 
         // Push to "data"
