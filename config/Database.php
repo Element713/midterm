@@ -22,13 +22,14 @@ class Database {
             $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->dbname}";
 
             try {
-                $this->conn = new PDO($dsn, $this->username, $this->password);
+                $this->conn = new PDO($dsn, $this->username, $this->password, $options);
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
-                die(json_encode(['message' => 'Connection Error: ' . $e->getMessage()]));
+                http_response_code(500);
+                echo json_encode(['error' => 'Database connection failed', 'message' => $e->getMessage()]);
+                exit;
             }
             return $this->conn;
         }
     }   
 }
-?>
