@@ -16,7 +16,7 @@ if ($method === 'OPTIONS') {
 }
 
 // Load dependencies
-require 'vendor/autoload.php';
+
 require_once 'config/database.php';
 
 // Establish database connection
