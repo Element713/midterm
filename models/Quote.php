@@ -42,29 +42,41 @@ class Quote {
 
     // Get Single Quote
     public function read_single() {
-        // Create query to get a single quote based on the id
-        $query = 'SELECT id, quote, author_id, category_id FROM ' . $this->table . ' WHERE id = :id LIMIT 1 OFFSET 0';
-        
+        // Create query to get a single quote by ID
+        $query = 'SELECT 
+                    q.id,
+                    q.quote,
+                    a.author AS author_name,
+                    c.category AS category_name
+                  FROM ' . $this->table . ' q
+                  LEFT JOIN authors a ON q.author_id = a.id
+                  LEFT JOIN categories c ON q.category_id = c.id
+                  WHERE q.id = :id LIMIT 1';
+    
         // Prepare the statement
         $stmt = $this->conn->prepare($query);
     
-        // Bind the id parameter
+        // Bind the ID parameter
         $stmt->bindParam(':id', $this->id);
     
         // Execute the query
         $stmt->execute();
     
-        // Check if a record was found
+        // Check if any record is found
         if ($stmt->rowCount() > 0) {
-            // Fetch the record
+            // Fetch the result
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
     
             // Set the class properties
             $this->id = $row['id'];
             $this->quote = $row['quote'];
-            $this->author_id = $row['author_id'];
-            $this->category_id = $row['category_id'];
-    }    
+            $this->author_name = $row['author_name'];
+            $this->category_name = $row['category_name'];
+    
+            return true; // Quote found
+        } else {
+            return false; // Quote not found
+        }
     }
 
     // Create Quote

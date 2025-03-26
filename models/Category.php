@@ -29,28 +29,40 @@ class Category {
 
     // Get a single category by ID
     public function read_single() {
-        // Create query
-        $query = 'SELECT id, category FROM ' . $this->table . ' WHERE id = :id LIMIT 1';
+    // Create query to get a single quote by ID
+    $query = 'SELECT 
+                q.id,
+                q.quote,
+                a.author AS author_name,
+                c.category AS category_name
+              FROM ' . $this->table . ' q
+              LEFT JOIN authors a ON q.author_id = a.id
+              LEFT JOIN categories c ON q.category_id = c.id
+              WHERE q.id = :id LIMIT 1';
 
-        // Prepare statement
-        $stmt = $this->conn->prepare($query);
+    // Prepare the statement
+    $stmt = $this->conn->prepare($query);
 
-        // Bind the ID parameter
-        $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
+    // Bind the ID parameter
+    $stmt->bindParam(':id', $this->id);
 
-        // Execute query
-        $stmt->execute();
+    // Execute the query
+    $stmt->execute();
 
-        // Fetch result
+    // Check if any record is found
+    if ($stmt->rowCount() > 0) {
+        // Fetch the result
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($row) {
-            // Assign values to object properties
-            $this->id = $row['id'];
-            $this->category = $row['category'];
-        } else {
-            // Set category to null if not found
-            $this->category = null;
-        }
+        // Set the class properties
+        $this->id = $row['id'];
+        $this->quote = $row['quote'];
+        $this->author_name = $row['author_name'];
+        $this->category_name = $row['category_name'];
+
+        return true; // Quote found
+    } else {
+        return false; // Quote not found
     }
+}
 }?>
