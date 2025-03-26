@@ -44,32 +44,31 @@ class Quote{
 
     // Get Single Quote
     public function read_single() {
-
-    $query = 'SELECT 
-                 q.id,
-                 q.quote,
-                 a.author AS author_name, 
-                 c.category AS category_name
-              FROM ' . $this->table . ' q
-              LEFT JOIN authors a ON q.author_id = a.id
-              LEFT JOIN categories c ON q.category_id = c.id
-              WHERE q.id = ? 
-              LIMIT 1';
-
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
-    if ($row) {
-        $this->quote = $row['quote'];
-        $this->author_name = $row['author_name'];
-        $this->category_name = $row['category_name'];
-        return true;
-    } else {
-        return json_encode(["message" => "Quote Not Found"]);
+        $query = 'SELECT 
+                     q.id,
+                     q.quote,
+                     a.author AS author_name, 
+                     c.category AS category_name
+                  FROM ' . $this->table . ' q
+                  LEFT JOIN authors a ON q.author_id = a.id
+                  LEFT JOIN categories c ON q.category_id = c.id
+                  WHERE q.id = ? 
+                  LIMIT 1';
+    
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
+        $stmt->execute();
+    
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+        if ($row) {
+            $this->quote = $row['quote'];
+            $this->author_name = $row['author_name'];
+            $this->category_name = $row['category_name'];
+            return true;  
+        } else {
+            return false; 
+        }
     }
 }
 
@@ -161,6 +160,4 @@ class Quote{
         printf("Error: %s.\n", $stmt->error);
         return false;
     }
-}
-
-?>
+}?>
