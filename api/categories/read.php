@@ -36,8 +36,6 @@ if ($num > 0) {
 } else {
     // No Categories Found
     http_response_code(404);
-    // No quotes found, return an empty array
-echo json_encode([]);
-
+    echo json_encode(array('message' => 'No Categories Found'));
 }
 ?>
