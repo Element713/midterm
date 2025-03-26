@@ -7,37 +7,40 @@ header("X-Frame-Options: DENY");
 header("X-XSS-Protection: 1; mode=block");
 header("X-Content-Type-Options: nosniff");
 
-$method = $_SERVER['REQUEST_METHOD'];
-
-if ($method === 'OPTIONS') {
+// Handle preflight OPTIONS request
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
     header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
     exit();
 }
 
 // Load dependencies
-
 require_once 'config/Database.php';
 
 // Establish database connection
 $database = new Database();
 $db = $database->connect();
 
-// Handle Routing
-$request_uri = strtok($_SERVER['REQUEST_URI'], '?'); // Removes query parameters
+// Get request URI without query params
+$request_uri = strtok($_SERVER['REQUEST_URI'], '?');
+$request_uri = str_replace('/index.php', '', $request_uri); // Remove /index.php if present
 
-switch ($request_uri) {
-    case '/quotes':
-        require 'routes/Quote.php';
-        break;
-    case '/authors':
-        require 'routes/Author.php';
-        break;
-    case '/categories':
-        require 'routes/Category.php';
-        break;
-    default:
-        http_response_code(404);
-        echo json_encode(['message' => 'Endpoint not found']);
-        break;
+// Routing
+$routes = [
+    '/quotes' => 'routes/Quote.php',
+    '/authors' => 'routes/Author.php',
+    '/categories' => 'routes/Category.php'
+];
+
+if (isset($routes[$request_uri])) {
+    if (file_exists($routes[$request_uri])) {
+        require $routes[$request_uri];
+    } else {
+        http_response_code(500);
+        echo json_encode(['message' => 'Internal Server Error: Route file missing']);
+    }
+} else {
+    http_response_code(404);
+    echo json_encode(['message' => 'Endpoint not found']);
 }
+?>
