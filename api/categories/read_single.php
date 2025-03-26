@@ -23,7 +23,7 @@ $category->read_single();
 if (!isset($category->category)) {
     // No category found, return 404 response
     http_response_code(404);
-    echo json_encode(array('message' => 'category_id Not Found'));
+    echo json_encode(array('message' => 'Category Not Found'));
     exit;
 }
 

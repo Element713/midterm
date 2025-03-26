@@ -21,11 +21,7 @@
 
     // Set ID to be updated
     $category->id = $data->id;
-
-    $category->title = $data->title;
-    $category->body = $data->body;
-    $category->author = $data->author;
-    $category->category_id = $data->category_id;
+    $category->category = $data->category;
 
     // Update category
     if($category->update()){
@@ -38,4 +34,4 @@
         );
     }
 
-    ?>
+?>

@@ -9,7 +9,6 @@ Access-Control-Allow-Methods,Authorization,X-Requested-With');
 include_once '../../config/Database.php';
 include_once '../../models/Quote.php';
 
-
 // Instantiate DB & connect
 $database = new Database();
 $db = $database->connect();
@@ -35,10 +34,8 @@ $quote->category_id = htmlspecialchars(strip_tags($data->category_id));
 
 // Create Quote
 if ($quote->create()) {
-    http_response_code(201); // Created
     echo json_encode(['message' => 'Quote Created']);
 } else {
-    http_response_code(500); // Server error
     echo json_encode(['message' => 'Quote Not Created']);
 }
-    ?>
+?>

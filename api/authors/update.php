@@ -29,7 +29,7 @@ if (!isset($data->id) || !isset($data->author)) {
 
 // Set ID to be updated
 $author->id = $data->id;
-$author->author = $data->author; 
+$author->author = $data->author;
 
 // Update author
 if ($author->update()) {

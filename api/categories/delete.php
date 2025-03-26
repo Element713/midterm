@@ -8,7 +8,7 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 include_once '../../config/Database.php';
 include_once '../../models/Category.php';
 
-// Instantiate  DB & connect
+// Instantiate DB & connect
 $database = new Database();
 $db = $database->connect();
 

@@ -22,25 +22,23 @@ $num = $result->rowCount();
 // Check if any Quotes exist
 if ($num > 0) {
     // Quote array
-    $quote_arr = array();
-    $quote_arr['data'] = array();
+    $quotes_arr = array();
 
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
-
+    
         $quote_item = array(
             'id' => isset($id) ? $id : null,
             'quote' => isset($quote) ? html_entity_decode($quote) : null,
             'author' => isset($author_name) ? $author_name : 'Unknown Author',
-            'category' => isset($category_name) ? $category_name :
-'Uncategorized'
+            'category' => isset($category_name) ? $category_name : 'Uncategorized'
         );
-
-        array_push($quote_arr, $quote_item);
+    
+        array_push($quotes_arr, $quote_item);
     }
 
     // output JSON
-    echo json_encode($quote_arr);
+    echo json_encode($quotes_arr);
 } else {
     // No Quotes Found - Return an empty array
     echo json_encode(array('message' => 'No Quotes Found'));

@@ -20,26 +20,25 @@
     $data = json_decode(file_get_contents("php://input"));
 
     // Validate input data
-    if (!isset($data->id, $data->title, $data->body, $data->author, $data->category_id)) {
+    if (!isset($data->id, $data->quote, $data->author_id, $data->author, $data->category_id, $data->category)) {
     http_response_code(400);
     echo json_encode(array('message' => 'Missing Required Fields'));
     exit();
     }
-
     // Set ID to be updated
     $quote->id = $data->id;
-    $quote->title = $data->title;
-    $quote->body = $data->body;
+    $quote->quote = $data->quote;
+    $quote->author_id = $data->author_id;
     $quote->author = $data->author;
     $quote->category_id = $data->category_id;
+    $quote->category = $data->category;
 
     // Update quote
     if ($quote->update()) {
-        http_response_code(200);
+        
         echo json_encode(array('message' => 'Quote Updated'));
     } else {
-        http_response_code(500);
+        
         echo json_encode(array('message' => 'Quote Not Updated'));
 }
-
-    ?>
+?>

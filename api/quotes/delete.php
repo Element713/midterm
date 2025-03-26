@@ -31,10 +31,8 @@ $quote->id = htmlspecialchars(strip_tags($data->id));
 
 // Delete quote
 if ($quote->delete()) {
-    http_response_code(200); // OK
     echo json_encode(['message' => 'Quote Deleted']);
 } else {
-    http_response_code(500); // Internal Server Error
     echo json_encode(['message' => 'Quote Not Deleted']);
 }
 ?>
