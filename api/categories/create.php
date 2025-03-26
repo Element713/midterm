@@ -15,32 +15,22 @@ $db = $database->connect();
 // Instantiate category object
 $category = new Category($db);
 
-// Get raw category data
+// Get raw data from POST request
 $data = json_decode(file_get_contents("php://input"));
 
-// Validate JSON input
-if (!$data) {
-    http_response_code(400); // Bad Request
-    echo json_encode(array('message' => 'Invalid JSON input'));
+// Check for missing parameters (except 'id')
+if (!isset($data->category)) {
+    echo json_encode(array('message' => 'Missing Required Parameters'));
     exit();
 }
 
-// Validate required field
-if (!isset($data->category) || empty(trim($data->category))) {
-    http_response_code(400);
-    echo json_encode(array('message' => 'Missing Required Field: category'));
-    exit();
-}
-
-// Set category name
-$category->category = htmlspecialchars(strip_tags($data->category)); // Sanitize input
+// Set category details
+$category->category = $data->category;
 
 // Create category
 if ($category->create()) {
-    http_response_code(201); // Created
-    echo json_encode(array('message' => 'Category Created'));
+    echo json_encode(array('id' => $category->id, 'category' => $category->category));
 } else {
-    http_response_code(500); // Internal Server Error
-    echo json_encode(array('message' => 'Category Not Created - Database Error'));
+    echo json_encode(array('message' => 'category_id Not Found'));
 }
 ?>

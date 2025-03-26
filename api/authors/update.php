@@ -13,32 +13,26 @@ include_once '../../models/Author.php';
 $database = new Database();
 $db = $database->connect();
 
-// Instantiate blog author object
+// Instantiate author object
 $author = new Author($db);
 
-// Get raw author data
+// Get raw data from PUT request
 $data = json_decode(file_get_contents("php://input"));
 
-// Check if the required fields are set
+// Check for missing parameters (except 'id')
 if (!isset($data->id) || !isset($data->author)) {
-    echo json_encode(
-        array('message' => 'Missing Required Parameters')
-    );
+    echo json_encode(array('message' => 'Missing Required Parameters'));
     exit();
 }
 
-// Set ID to be updated
+// Set author details
 $author->id = $data->id;
 $author->author = $data->author;
 
 // Update author
 if ($author->update()) {
-    echo json_encode(
-        array('message' => 'Author Updated')
-    );
+    echo json_encode(array('id' => $author->id, 'author' => $author->author));
 } else {
-    echo json_encode(
-        array('message' => 'Author Not Updated')
-    );
+    echo json_encode(array('message' => 'author_id Not Found'));
 }
 ?>

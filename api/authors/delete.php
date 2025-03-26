@@ -1,4 +1,4 @@
-<<?php
+<?php
 // Headers
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
@@ -16,22 +16,22 @@ $db = $database->connect();
 // Instantiate author object
 $author = new Author($db);
 
-// Get raw author data
+// Get raw data from DELETE request
 $data = json_decode(file_get_contents("php://input"));
 
-// Check if the ID is provided
-if (isset($data->id)) {
-    // Set ID to be deleted
-    $author->id = $data->id;
+// Check for missing id
+if (!isset($data->id)) {
+    echo json_encode(array('message' => 'No Authors Found'));
+    exit();
+}
 
-    // Delete author
-    if ($author->delete()) {
-        echo json_encode(array('message' => 'Author Deleted'));
-    } else {
-        echo json_encode(array('message' => 'Author Not Deleted'));
-    }
+// Set author id
+$author->id = $data->id;
+
+// Delete author
+if ($author->delete()) {
+    echo json_encode(array('id' => $author->id));
 } else {
-    // Missing ID
-    echo json_encode(array('message' => 'Missing Required Field: id'));
+    echo json_encode(array('message' => 'No Authors Found'));
 }
 ?>

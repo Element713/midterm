@@ -13,26 +13,25 @@ include_once '../../models/Quote.php';
 $database = new Database();
 $db = $database->connect();
 
-// Instantiate Quote object
+// Instantiate quote object
 $quote = new Quote($db);
 
-// Get raw posted data
+// Get raw data from DELETE request
 $data = json_decode(file_get_contents("php://input"));
 
-// Validate input
-if (!isset($data->id) || empty($data->id)) {
-    http_response_code(400);
-    echo json_encode(['message' => 'Missing Required ID']);
-    exit;
+// Check for missing id
+if (!isset($data->id)) {
+    echo json_encode(array('message' => 'No Quotes Found'));
+    exit();
 }
 
-// Sanitize ID
-$quote->id = htmlspecialchars(strip_tags($data->id));
+// Set quote id
+$quote->id = $data->id;
 
 // Delete quote
 if ($quote->delete()) {
-    echo json_encode(['message' => 'Quote Deleted']);
+    echo json_encode(array('id' => $quote->id));
 } else {
-    echo json_encode(['message' => 'Quote Not Deleted']);
+    echo json_encode(array('message' => 'No Quotes Found'));
 }
 ?>

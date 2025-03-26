@@ -15,25 +15,22 @@ $db = $database->connect();
 // Instantiate category object
 $category = new Category($db);
 
-// Get raw category data
+// Get raw data from DELETE request
 $data = json_decode(file_get_contents("php://input"));
 
-// Check if ID is provided
-if (!isset($data->id) || empty($data->id)) {
-    http_response_code(400); // Bad Request
-    echo json_encode(array('message' => 'Category ID is required'));
-    exit;
+// Check for missing id
+if (!isset($data->id)) {
+    echo json_encode(array('message' => 'No Categories Found'));
+    exit();
 }
 
-// Set ID for deletion
+// Set category id
 $category->id = $data->id;
 
-// Attempt to delete the category
+// Delete category
 if ($category->delete()) {
-    http_response_code(200); // OK
-    echo json_encode(array('message' => 'Category Deleted'));
+    echo json_encode(array('id' => $category->id));
 } else {
-    http_response_code(404); // Not Found
-    echo json_encode(array('message' => 'Category Not Found or Could Not Be Deleted'));
+    echo json_encode(array('message' => 'No Categories Found'));
 }
 ?>
