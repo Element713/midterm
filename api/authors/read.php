@@ -34,9 +34,8 @@
         echo json_encode($authors_arr);
     } else {
         // No authors found
-        echo json_encode(
-            array('message' => 'No Authors Found')
-        );
+        // No quotes found, return an empty array
+echo json_encode([]);
         }
     
 ?>
