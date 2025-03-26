@@ -21,7 +21,7 @@ if ($author->read_single()) {
     // Create array
     $author_array = array(
         'id' => $author->id,
-        'name' => $author->name // Assuming `name` is the property in your `Author` class
+        'author' => $author->author // Assuming `name` is the property in your `Author` class
     );
 
     // Make JSON

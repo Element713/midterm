@@ -26,14 +26,14 @@ if (!$data) {
 }
 
 // Validate required fields
-if (!isset($data->name)) {
+if (!isset($data->author)) {
     http_response_code(400); // Bad Request
-    echo json_encode(array('message' => 'Missing Required Field: name'));
+    echo json_encode(array('message' => 'Missing Required Field: author'));
     exit();
 }
 
 // Sanitize input
-$author->name = htmlspecialchars(strip_tags($data->name));
+$author->author = htmlspecialchars(strip_tags($data->author));
 
 // Create author
 if ($author->create()) {

@@ -20,7 +20,7 @@ $category->id = isset($_GET['id']) ? $_GET['id'] : die();
 $category->read_single();
 
 // Check if category exists
-if (!isset($category->name)) {
+if (!isset($category->category)) {
     // No category found, return 404 response
     http_response_code(404);
     echo json_encode(array('message' => 'Category Not Found'));
@@ -30,7 +30,7 @@ if (!isset($category->name)) {
 // Create category array
 $category_array = array(
     'id' => $category->id, 
-    'name' => $category->name
+    'category' => $category->category
 );
 
 // Convert to JSON and output

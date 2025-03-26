@@ -20,7 +20,7 @@ $author = new Author($db);
 $data = json_decode(file_get_contents("php://input"));
 
 // Check if the required fields are set
-if (!isset($data->id) || !isset($data->name)) {
+if (!isset($data->id) || !isset($data->author)) {
     echo json_encode(
         array('message' => 'Missing Required Parameters')
     );
@@ -29,7 +29,7 @@ if (!isset($data->id) || !isset($data->name)) {
 
 // Set ID to be updated
 $author->id = $data->id;
-$author->name = $data->name; // Assuming you want to update the 'name' of the author
+$author->author = $data->author; 
 
 // Update author
 if ($author->update()) {

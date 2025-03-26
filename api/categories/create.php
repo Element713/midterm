@@ -26,14 +26,14 @@ if (!$data) {
 }
 
 // Validate required field
-if (!isset($data->name) || empty(trim($data->name))) {
+if (!isset($data->category) || empty(trim($data->category))) {
     http_response_code(400);
-    echo json_encode(array('message' => 'Missing Required Field: name'));
+    echo json_encode(array('message' => 'Missing Required Field: category'));
     exit();
 }
 
 // Set category name
-$category->name = htmlspecialchars(strip_tags($data->name)); // Sanitize input
+$category->category = htmlspecialchars(strip_tags($data->category)); // Sanitize input
 
 // Create category
 if ($category->create()) {

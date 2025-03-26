@@ -16,7 +16,7 @@ class Author {
     // Get all authors
     public function read() {
         // Query to fetch authors
-        $query = 'SELECT id, name FROM ' . $this->table . ' ORDER BY id ASC';
+        $query = 'SELECT id, author FROM ' . $this->table . ' ORDER BY id ASC';
 
         try {
             // Prepare statement
@@ -50,7 +50,7 @@ class Author {
     // Get a single author by ID
     public function read_single() {
         // Query to fetch single author
-        $query = 'SELECT id, name FROM ' . $this->table . ' WHERE id = :id LIMIT 1';
+        $query = 'SELECT id, author FROM ' . $this->table . ' WHERE id = :id LIMIT 1';
 
         try {
             // Prepare statement

@@ -16,7 +16,7 @@ class Category {
     // Get all categories
     public function read() {
         // Create query to fetch all categories
-        $query = 'SELECT id, name FROM ' . $this->table . ' ORDER BY id DESC';
+        $query = 'SELECT id, category FROM ' . $this->table . ' ORDER BY id DESC';
 
         try {
             // Prepare statement
@@ -49,7 +49,7 @@ class Category {
     // Get single category by ID
     public function read_single() {
         // Query to fetch a single category
-        $query = 'SELECT id, name FROM ' . $this->table . ' WHERE id = :id LIMIT 1';
+        $query = 'SELECT id, category FROM ' . $this->table . ' WHERE id = :id LIMIT 1';
 
         try {
             // Prepare statement
