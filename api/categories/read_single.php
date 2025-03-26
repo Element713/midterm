@@ -19,11 +19,11 @@ $category->id = isset($_GET['id']) ? $_GET['id'] : die();
 // Fetch category data
 $category->read_single();
 
+
 // Check if category exists
-if (!isset($category->category)) {
-    // No category found, return 404 response
-    http_response_code(404);
-    echo json_encode(array('message' => 'Category Not Found'));
+if ($category->category === null) {
+    // No category found, return JSON message but keep HTTP 200 status
+    echo json_encode(array('message' => 'category_id Not Found'));
     exit;
 }
 
