@@ -17,7 +17,7 @@ if ($method === 'OPTIONS') {
 
 // Load dependencies
 
-require_once 'config/database.php';
+require_once 'config/Database.php';
 
 // Establish database connection
 $database = new Database();
