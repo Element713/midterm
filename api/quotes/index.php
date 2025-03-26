@@ -1,51 +1,25 @@
 <?php
-header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json');
-    $method = $_SERVER['REQUEST_METHOD'];
-
-    if ($method === 'OPTIONS') {
-        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-        header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
-        exit();
-    }
-    
-// Include necessary files
+header('Content-Type: application/json');
 include_once '../../config/Database.php';
 include_once '../../models/Quote.php';
 
-
-// Instantiate DB & connect
 $database = new Database();
 $db = $database->connect();
 
-// Instantiate quote object
 $quote = new Quote($db);
 
-// Handle different HTTP methods
-switch ($method) {
-    case 'GET':
-        // If there's an ID in the query string, fetch the single quote
-        if (isset($_GET['id'])) {
-            include_once 'read_single.php'; // Fetch single quote
-        } else {
-            include_once 'read.php'; // Fetch all quotes
-        }
-        break;
-    
-    case 'POST':
-        include_once 'create.php'; // Create a new quote
-        break;
+$params = $_GET;
+$result = $quote->read($params);
+$num = $result->rowCount();
 
-    case 'PUT':
-        include_once 'update.php'; // Update an existing quote
-        break;
-    
-    case 'DELETE':
-        include_once 'delete.php'; // Delete a quote
-        break;
-
-    default:
-        echo json_encode(array('message' => 'Method Not Allowed'));
-        break;
+if ($num > 0) {
+    $quotes_arr = [];
+    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        extract($row);
+        $quotes_arr[] = ['id' => $id, 'quote' => $quote, 'author_id' => $author_id, 'category_id' => $category_id];
+    }
+    echo json_encode($quotes_arr);
+} else {
+    echo json_encode(["message" => "No Quotes Found"]);
 }
 ?>
