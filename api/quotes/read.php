@@ -24,8 +24,8 @@ if ($num > 0) {
         extract($row);
         
         $quote_item = array(
-            'id' => isset($id) ? $id : null,
-            'quote' => isset($quote) ? html_entity_decode($quote) : null,
+            'id' => isset($id) ? $id : 'unknown',
+            'quote' => isset($quote) ? html_entity_decode($quote) : 'unknown',
             'author' => isset($author_name) ? $author_name : 'Unknown Author',
             'category' => isset($category_name) ? $category_name : 'Uncategorized'
         );
