@@ -27,6 +27,7 @@ if ($category->category === null) {
     exit;
 }
 
+
 // Create category array
 $category_array = array(
     'id' => $category->id, 

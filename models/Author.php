@@ -30,28 +30,29 @@ class Author {
     public function read_single() {
         // Query to fetch single author
         $query = 'SELECT id, author FROM ' . $this->table . ' WHERE id = :id LIMIT 1';
-
-            // Prepare statement
-            $stmt = $this->conn->prepare($query);
-
-            // Bind the ID parameter
-            $stmt->bindParam(':id', $this->id);
-
-            // Execute query
-            $stmt->execute();
-
-            // Check if any author exists
-            if ($stmt->rowCount() > 0) {
-                // Get the result
-                $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                // Set properties
-                $this->id = $row['id'];
-                $this->author = $row['author'];
-
-                return true;
-            }
-            return false; // No author found
-    }
+    
+        // Prepare statement
+        $stmt = $this->conn->prepare($query);
+    
+        // Bind the ID parameter
+        $stmt->bindParam(':id', $this->id);
+    
+        // Execute query
+        $stmt->execute();
+    
+        // Check if any author exists
+        if ($stmt->rowCount() > 0) {
+            // Get the result
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+            // Set properties
+            $this->id = $row['id'];
+            $this->author = $row['author'];
+    
+            return true; // Author found
+        } else {
+            return false; // Author not found
+        }
+}
 }
 ?>
