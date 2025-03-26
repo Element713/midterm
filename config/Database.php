@@ -1,5 +1,5 @@
 <?php
-class Database {
+class Database {    
     private $conn;
     private $host;
     private $port;
@@ -16,22 +16,19 @@ class Database {
     }
 
     public function connect() {
-        if ($this->conn){
+		if ($this->conn){
             return $this->conn;
         } else {
-            $dsn =
-"pgsql:host={$this->host};port={$this->port};dbname={$this->dbname}";
+            $dsn = "pgsql:host={$this->host};port={$this->port};dbname={$this->dbname}";
 
             try {
                 $this->conn = new PDO($dsn, $this->username, $this->password);
-                $this->conn->setAttribute(PDO::ATTR_ERRMODE,
-PDO::ERRMODE_EXCEPTION);
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             } catch (PDOException $e) {
-                die(json_encode(['message' => 'Connection Error: ' .
-$e->getMessage()]));
+                die(json_encode(['message' => 'Connection Error: ' . $e->getMessage()]));
             }
             return $this->conn;
         }
-    }
+    }   
 }
 ?>
