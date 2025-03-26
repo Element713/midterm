@@ -12,6 +12,9 @@ header('Access-Control-Allow-Origin: *');
 include_once '../../config/Database.php';
 include_once '../../models/Author.php';
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Instantiate DB & connect
 $database = new Database();
 $db = $database->connect();

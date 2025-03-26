@@ -1,4 +1,6 @@
 <?php
+
+
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header("Access-Control-Allow-Credentials: true");
@@ -16,6 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Load dependencies
 require_once 'config/Database.php';
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 // Establish database connection
 $database = new Database();
