@@ -1,9 +1,4 @@
 <?php
-
-// Headers
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
-
 // Include necessary files
 include_once '../../config/Database.php';
 include_once '../../models/Quote.php';
@@ -25,7 +20,6 @@ $quotes_arr = array();
 
 // Check if any quotes exist
 if ($num > 0) {
-    $quotes_arr = array();
     while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
         extract($row);
         
@@ -39,14 +33,12 @@ if ($num > 0) {
         array_push($quotes_arr, $quote_item);
     }
 
-     // Set response code & output JSON
-     http_response_code(200);
-     echo json_encode($quotes_arr);
- } else {
-     // No Categories Found
-     http_response_code(404);
-     // No quotes found, return an empty array
- echo json_encode([]);
- 
- }
- ?>
+    // Set response code to 200 (OK)
+    http_response_code(200);
+    echo json_encode($quotes_arr);
+} else {
+    // No Quotes Found - Return an empty array
+    http_response_code(404);
+    echo json_encode(["message" => "No Quotes Found"]);
+}
+?>
