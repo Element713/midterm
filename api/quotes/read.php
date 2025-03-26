@@ -41,7 +41,7 @@ if ($num > 0) {
 
      // Set response code & output JSON
      http_response_code(200);
-     echo json_encode($categories_arr);
+     echo json_encode($quotes_arr);
  } else {
      // No Categories Found
      http_response_code(404);
