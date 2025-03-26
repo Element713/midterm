@@ -38,5 +38,4 @@
             array('message' => 'No Authors Found')
         );
         }
-    
 ?>
