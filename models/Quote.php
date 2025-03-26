@@ -69,7 +69,6 @@ class Quote{
         } else {
             return false; 
         }
-    }
 }
 
     // Create Quote
