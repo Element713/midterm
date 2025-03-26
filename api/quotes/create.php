@@ -20,13 +20,14 @@ $quote = new Quote($db);
 $data = json_decode(file_get_contents("php://input"));
 
 // Validate input
-if (!isset( $data->quote, $data->author, $data->category)) {
+if (!isset($data->id, $data->quote, $data->author, $data->category)) {
     http_response_code(400);
     echo json_encode(['message' => 'Missing Required Parameters']);
     exit;
 }
 
 // Assign sanitized values
+$quote->id = htmlspecialchars(strip_tags($data->id));
 $quote->quote = htmlspecialchars(strip_tags($data->quote));
 $quote->author = htmlspecialchars(strip_tags($data->author));
 $quote->category = htmlspecialchars(strip_tags($data->category));
