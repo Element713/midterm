@@ -27,42 +27,18 @@ class Quote{
             q.category_id,
             a.author AS author_name,
             c.category AS category_name
-        FROM ' . $this->table . ' q
-        LEFT JOIN authors a ON q.author_id = a.id
-        LEFT JOIN categories c ON q.category_id = c.id
-        ORDER BY q.id DESC';
-    
+          FROM ' . $this->table . ' q
+          LEFT JOIN authors a ON q.author_id = a.id
+          LEFT JOIN categories c ON q.category_id = c.id
+          ORDER BY q.id DESC';
+        
         // Prepare statement
         $stmt = $this->conn->prepare($query);
-    
+
         // Execute query
         $stmt->execute();
-    
-        // Check if any quotes are returned
-        if ($stmt->rowCount() > 0) {
-            $quotes_arr = array();
-    
-            // Fetch all quotes
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                extract($row);
-                $quote_item = array(
-                    'id' => $id,
-                    'quote' => $quote,
-                    'category_id' => $category_id,
-                    'author_name' => $author_name,
-                    'category_name' => $category_name
-                );
-    
-                array_push($quotes_arr, $quote_item);
-            }
-    
-            // Return JSON object with a 'quotes' key
-            return json_encode(['quotes' => $quotes_arr]);
-    
-        } else {
-            // Return message if no quotes found
-            return json_encode(['message' => 'No quotes found']);
-        }
+
+        return $stmt;
     }
 
 
@@ -169,4 +145,3 @@ class Quote{
         return false;
     }
 }
-?>
