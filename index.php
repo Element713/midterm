@@ -28,13 +28,13 @@ $request_uri = strtok($_SERVER['REQUEST_URI'], '?'); // Removes query parameters
 
 switch ($request_uri) {
     case '/quotes':
-        require 'routes/quotes.php';
+        require 'routes/Quote.php';
         break;
     case '/authors':
-        require 'routes/authors.php';
+        require 'routes/Author.php';
         break;
     case '/categories':
-        require 'routes/categories.php';
+        require 'routes/Category.php';
         break;
     default:
         http_response_code(404);
