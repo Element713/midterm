@@ -21,13 +21,13 @@ if ($author->read_single()) {
     // Create array
     $author_array = array(
         'id' => $author->id,
-        'author' => $author->author // Assuming `name` is the property in your `Author` class
+        'author' => $author->author 
     );
 
     // Make JSON
     echo json_encode($author_array);
 } else {
     // If no author found
-    echo json_encode(array('message' => 'Author Not Found'));
+    echo json_encode(array('message' => 'author_id Not Found'));
 }
 ?>
