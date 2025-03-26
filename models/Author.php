@@ -51,7 +51,7 @@ class Author {
 
                 return true;
             }
-            return false; // No author found
+            return json_encode(["message" => "Author Not Found"]); // No author found
     }
 }
 ?>

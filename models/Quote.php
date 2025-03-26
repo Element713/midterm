@@ -69,7 +69,7 @@ class Quote{
         $this->category_name = $row['category_name'];
         return true;
     } else {
-        return false;
+        return json_encode(["message" => "Quote Not Found"]);
     }
 }
 
