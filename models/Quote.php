@@ -1,22 +1,21 @@
 <?php
-class Quote{
-	// DB Stuff
-	private $conn;
-	private $table = 'quotes';
+class Quote {
+    // DB Stuff
+    private $conn;
+    private $table = 'quotes';
 
-	// Quote Properties
-	public $id;
-	public $quote;
+    // Quote Properties
+    public $id;
+    public $quote;
     public $category_id;
-	public $category_name;
+    public $category_name;
     public $author_id;
-	public $author_name;
-    
+    public $author_name;
 
-	// Constructor with DB 
-	public function __construct($db) {
-		$this->conn = $db;
-	}
+    // Constructor with DB 
+    public function __construct($db) {
+        $this->conn = $db;
+    }
 
     // Get Quotes
     public function read() {
@@ -41,37 +40,32 @@ class Quote{
         return $stmt;
     }
 
-
     // Get Single Quote
     public function read_single() {
-
-    $query = 'SELECT 
-                 q.id,
-                 q.quote,
-                 a.author AS author_name, 
-                 c.category AS category_name
-              FROM ' . $this->table . ' q
-              LEFT JOIN authors a ON q.author_id = a.id
-              LEFT JOIN categories c ON q.category_id = c.id
-              WHERE q.id = ? 
-              LIMIT 1';
-
-    $stmt = $this->conn->prepare($query);
-    $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
-    $stmt->execute();
-
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
-    if ($row) {
-        $this->quote = $row['quote'];
-        $this->author_name = $row['author_name'];
-        $this->category_name = $row['category_name'];
-        return true;
-    } else {
-        return false;
+        // Create query to get a single quote based on the id
+        $query = 'SELECT id, quote, author_id, category_id FROM ' . $this->table . ' WHERE id = :id LIMIT 0,1';
+        
+        // Prepare the statement
+        $stmt = $this->conn->prepare($query);
+    
+        // Bind the id parameter
+        $stmt->bindParam(':id', $this->id);
+    
+        // Execute the query
+        $stmt->execute();
+    
+        // Check if a record was found
+        if ($stmt->rowCount() > 0) {
+            // Fetch the record
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Set the class properties
+            $this->id = $row['id'];
+            $this->quote = $row['quote'];
+            $this->author_id = $row['author_id'];
+            $this->category_id = $row['category_id'];
+        }
     }
-}
 
     // Create Quote
     public function create() {
@@ -162,5 +156,3 @@ class Quote{
         return false;
     }
 }
-
-?>
