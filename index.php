@@ -15,7 +15,7 @@ if ($method === 'OPTIONS') {
     exit();
 }
 //CORS
-require_once __DIR__ . '/config/Database.php';;
+require_once __DIR__ . '/config/Database.php';
 //Database
 $database = new Database();
 $db = $database->connect();

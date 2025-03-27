@@ -1,14 +1,5 @@
 <?php
-// Headers ON THEIR OWN LINES, IF SPLIT TO SECOND LINE IT WILL NOT WORK
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
 
-
-include_once '../../models/Author.php';
-
-// DB Stuff
-$database = new Database();
-$db = $database->connect();
 
 $author = new Author($db);
 

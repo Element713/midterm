@@ -12,6 +12,8 @@ header('Access-Control-Allow-Origin: *');
     
 include_once '../../config/Database.php';
 include_once '../../models/Quote.php';
+include_once '../../models/Author.php';
+include_once '../../models/Category.php';
 
 $database = new Database();
 $db = $database->connect();
