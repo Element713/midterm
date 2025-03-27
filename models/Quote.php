@@ -122,4 +122,16 @@ class Quote{
 
         return false;
     }
+    public function findById() {
+        $query = 'SELECT id FROM quotes WHERE id = :id';
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $this->id);
+        $stmt->execute();
+    
+        if ($stmt->rowCount() > 0) {
+            return true; // Quote found
+        } else {
+            return false; // Quote not found
+        }
+    }
 }
