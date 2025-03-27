@@ -4,7 +4,7 @@ class Quote{
 	private $conn;
 	private $table = 'quotes';
 
-	// Quote Properties
+// Props
 	public $id;
 	public $quote;
     public $category_id;
@@ -13,49 +13,25 @@ class Quote{
 	public $author_name;
     
 
-	// Constructor with DB 
+	//constructor
 	public function __construct($db) {
 		$this->conn = $db;
 	}
 
-    // Get Quotes
+    // Get 
     public function read() {
-        // Create query
-        $query = 'SELECT 
-            q.id,
-            q.quote,
-            q.category_id,
-            a.author AS author_name,
-            c.category AS category_name
-          FROM ' . $this->table . ' q
-          LEFT JOIN authors a ON q.author_id = a.id
-          LEFT JOIN categories c ON q.category_id = c.id
-          ORDER BY q.id DESC';
+        $query = 'SELECT  q.id,q.quote, q.category_id, a.author AS author_name, c.category AS category_name FROM ' . $this->table . ' q LEFT JOIN authors a ON q.author_id = a.id LEFT JOIN categories c ON q.category_id = c.id ORDER BY q.id DESC';
         
-        // Prepare statement
         $stmt = $this->conn->prepare($query);
-
-        // Execute query
         $stmt->execute();
-
         return $stmt;
     }
 
 
-    // Get Single Quote
+    // singe 
     public function read_single() {
 
-    $query = 'SELECT 
-                 q.id,
-                 q.quote,
-                 a.author AS author_name, 
-                 c.category AS category_name
-              FROM ' . $this->table . ' q
-              LEFT JOIN authors a ON q.author_id = a.id
-              LEFT JOIN categories c ON q.category_id = c.id
-              WHERE q.id = ? 
-              LIMIT 1';
-
+    $query = 'SELECT  q.id,  q.quote,  a.author AS author_name,   c.category AS category_name FROM ' . $this->table . ' q LEFT JOIN authors a ON q.author_id = a.id LEFT JOIN categories c ON q.category_id = c.id WHERE q.id = ? LIMIT 1';
     $stmt = $this->conn->prepare($query);
     $stmt->bindParam(1, $this->id, PDO::PARAM_INT);
     $stmt->execute();
@@ -73,79 +49,63 @@ class Quote{
     }
 }
 
-    // Create Quote
+    // Create 
     public function create() {
-        $query = 'INSERT INTO ' . $this->table . ' (quote, author_id, category_id) 
-                  VALUES (:quote, :author_id, :category_id)';
-    
+        $query = 'INSERT INTO ' . $this->table . ' (quote, author_id, category_id) VALUES (:quote, :author_id, :category_id)';
         $stmt = $this->conn->prepare($query);
     
-        // Bind parameters
         $stmt->bindParam(':quote', $this->quote);
         $stmt->bindParam(':author_id', $this->author_id, PDO::PARAM_INT);
         $stmt->bindParam(':category_id', $this->category_id, PDO::PARAM_INT);
     
         if ($stmt->execute()) {
-            $this->id = $this->conn->lastInsertId();  // Retrieve last inserted ID
+            $this->id = $this->conn->lastInsertId(); 
             return true;
         }
         return false;
     }
 
-    // Update Quote
+    // Update 
     public function update() {
-        // Create query
+            // Create, prepare,bind,clean data
         $query = 'UPDATE ' . $this->table . '
-                  SET quote = :quote, 
-                      author_id = :author_id, 
-                      category_id = :category_id
-                  WHERE id = :id';
+                  SET quote = :quote,  author_id = :author_id, category_id = :category_id  WHERE id = :id';
 
-        // Prepare statement
         $stmt = $this->conn->prepare($query);
 
-        // Clean and sanitize data
+        
         $this->quote = htmlspecialchars(strip_tags($this->quote));
         $this->author_id = htmlspecialchars(strip_tags($this->author_id));
         $this->category_id = htmlspecialchars(strip_tags($this->category_id));
         $this->id = htmlspecialchars(strip_tags($this->id));
 
-        // Bind Data
         $stmt->bindParam(':quote', $this->quote);
         $stmt->bindParam(':author_id', $this->author_id, PDO::PARAM_INT);
         $stmt->bindParam(':category_id', $this->category_id, PDO::PARAM_INT);
         $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
 
-        // Execute query
         if ($stmt->execute()) {
-            return true;
-        }
-        return false;
-    }
+            return true;  }  return false; }
 
-    // Delete Quote
+    // Delete 
     public function delete() {
-        // Create query
+        // Create, prepare,bind,clean data
         $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
 
-        // Prepare statement
         $stmt = $this->conn->prepare($query);
 
-        // Clean data
         $this->id = htmlspecialchars(strip_tags($this->id));
 
-        // Bind data
         $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
 
-        // Execute query
         $stmt->execute();
 
-        // Check if any row was actually deleted
+        // Check row count
         if ($stmt->rowCount() > 0) {
-            return true; // Success
+            return true; 
         }
 
-        return false; // No row deleted (invalid ID)
+        return false; 
         }
 
         public function findById() {

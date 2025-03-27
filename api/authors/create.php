@@ -1,5 +1,5 @@
 <?php
-// Headers
+// Headers ON THEIR OWN LINES, IF SPLIT TO SECOND LINE IT WILL NOT WORK
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: POST');
@@ -8,17 +8,15 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 include_once '../../config/Database.php';
 include_once '../../models/Author.php';
 
-// Instantiate DB & connect
 $database = new Database();
 $db = $database->connect();
 
-// Instantiate author object
 $author = new Author($db);
 
-// Get raw data from POST request
+// Get that data
 $data = json_decode(file_get_contents("php://input"));
 
-// Check for missing parameters (except 'id')
+// Check ID
 if (!isset($data->author)) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
     exit();
@@ -27,7 +25,7 @@ if (!isset($data->author)) {
 // Set author details
 $author->author = $data->author;
 
-// Create author
+// Create 
 if ($author->create()) {
     echo json_encode(array(
         'id' => $author->id, 

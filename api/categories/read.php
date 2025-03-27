@@ -1,24 +1,20 @@
 <?php
-// Headers
+// Headers ON THEIR OWN LINES, IF SPLIT TO SECOND LINE IT WILL NOT WORK
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
 include_once '../../config/Database.php';
 include_once '../../models/Category.php';
 
-// Instantiate DB & connect
 $database = new Database();
 $db = $database->connect();
 
-// Instantiate category object
 $category = new Category($db);
 
-// Category read query
 $result = $category->read();
-// Get row count
+
 $num = $result->rowCount();
 
-// Check if any categories exist
 if ($num > 0) {
     $categories_arr = array();
 
@@ -30,10 +26,9 @@ if ($num > 0) {
         );
     }
 
-    // Set response code & output JSON
+   //output json array 
     echo json_encode($categories_arr);
 } else {
-    // No Categories Found
     echo json_encode(array('message' => 'No Categories Found'));
 }
 ?>

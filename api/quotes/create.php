@@ -1,37 +1,37 @@
 <?php
-// Headers
+// Headers ON THEIR OWN LINES, IF SPLIT TO SECOND LINE IT WILL NOT WORK
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
 
-// Include necessary files
+
 include_once '../../config/Database.php';
 include_once '../../models/Quote.php';
 include_once '../../models/Author.php';
 include_once '../../models/Category.php';
 
-// Instantiate DB & connect
+
 $database = new Database();
 $db = $database->connect();
 
-// Instantiate objects
+
 $quote = new Quote($db);
 $author = new Author($db);
 $category = new Category($db);
 
-// Get raw POST data
+
 $data = json_decode(file_get_contents("php://input"));
 
-// Check if required parameters are missing
+
 if (!isset($data->quote) || !isset($data->author_id) || !isset($data->category_id)) {
 
     echo json_encode(array('message' => 'Missing Required Parameters'));
     exit();
 }
 
-// Validate author_id
+//author_id check
 $author->id = $data->author_id;
 if (!$author->findById()) {
 
@@ -39,15 +39,14 @@ if (!$author->findById()) {
     exit();
 }
 
-// Validate category_id
+//category_id check
 $category->id = $data->category_id;
 if (!$category->findById()) {
 
     echo json_encode(array('message' => 'category_id Not Found'));
     exit();
 }
-
-// Set quote details
+//set details
 $quote->quote = $data->quote;
 $quote->author_id = $data->author_id;
 $quote->category_id = $data->category_id;

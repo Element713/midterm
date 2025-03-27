@@ -1,5 +1,5 @@
 <?php
-// Headers
+// Headers ON THEIR OWN LINES, IF SPLIT TO SECOND LINE IT WILL NOT WORK
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Methods: DELETE');
@@ -8,26 +8,24 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,
 include_once '../../config/Database.php';
 include_once '../../models/Author.php';
 
-// Instantiate DB & connect
 $database = new Database();
 $db = $database->connect();
 
-// Instantiate author object
 $author = new Author($db);
 
-// Get raw data from DELETE request
+// Get data
 $data = json_decode(file_get_contents("php://input"));
 
-// Check for missing id
+// Check id
 if (!isset($data->id)) {
     echo json_encode(array('message' => 'No Authors Found'));
     exit();
 }
 
-// Set author id
+// Set details
 $author->id = $data->id;
 
-// Delete author
+// Delete 
 if ($author->delete()) {
     echo json_encode(array('id' => $author->id));
 } else {

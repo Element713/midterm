@@ -1,5 +1,5 @@
 <?php
-// Headers
+// Headers ON THEIR OWN LINES, IF SPLIT TO SECOND LINE IT WILL NOT WORK
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 
@@ -13,7 +13,6 @@ $db = $database->connect();
 // Instantiate quote object
 $quote = new Quote($db);
 
-// Get ID from URL
 $quote->id = isset($_GET['id']) ? $_GET['id'] : die();
 
 // Get quote

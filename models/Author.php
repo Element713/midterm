@@ -1,122 +1,94 @@
 <?php
 class Author {
-    // DB connection
     private $conn;
     private $table = 'authors'; 
 
-    // Properties
     public $id;
     public $author;
 
-    // Constructor
     public function __construct($db) {
         $this->conn = $db;
     }
 
-    // Get all authors
+    // Get 
     public function read() {
-        // Query to fetch authors
         $query = 'SELECT id, author FROM ' . $this->table . ' ORDER BY id ASC';
 
             $stmt = $this->conn->prepare($query);
-
-            // Execute query
             $stmt->execute();
 
             return $stmt;
     }
 
-    // Get single author by ID
+    // Get single  (by ID)
     public function read_single() {
-        // Query to fetch single author
         $query = 'SELECT id, author FROM ' . $this->table . ' WHERE id = :id LIMIT 1';
 
-            // Prepare statement
             $stmt = $this->conn->prepare($query);
 
-            // Bind the ID parameter
             $stmt->bindParam(':id', $this->id);
 
-            // Execute query
             $stmt->execute();
 
-            // Check if any author exists
             if ($stmt->rowCount() > 0) {
-                // Get the result
+               
                 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                // Set properties
                 $this->id = $row['id'];
                 $this->author = $row['author'];
 
                 return true;
             }
-            return false; // No author found
+            return false; 
     }
 
-    // Create Author
+    // Create 
     public function create() {
-       // Correct query syntax for PostgreSQL
        $query = 'INSERT INTO ' . $this->table . ' (author) VALUES (:author) RETURNING id';
-    
-       // Prepare statement
+
        $stmt = $this->conn->prepare($query);
    
-       // Clean and sanitize data
        $this->author = htmlspecialchars(strip_tags($this->author));
    
-       // Bind Data
        $stmt->bindParam(':author', $this->author, PDO::PARAM_STR);
-   
-       // Execute query
+
        if ($stmt->execute()) {
-           // Fetch the last inserted id
            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-           $this->id = $row['id']; // Assuming your table has an 'id' column as primary key
+           $this->id = $row['id']; 
            return true;
        }
        return false;
    }
-    // Update Author
+    // Update 
     public function update() {
-        // Create query
         $query = 'UPDATE ' . $this->table . '
-                  SET author = :author
-                  WHERE id = :id';
-    
-        // Prepare statement
+                  SET author = :author WHERE id = :id';
+
         $stmt = $this->conn->prepare($query);
     
-        // Clean and sanitize data
         $this->author = htmlspecialchars(strip_tags($this->author));
         $this->id = htmlspecialchars(strip_tags($this->id));
     
-        // Bind Data
         $stmt->bindParam(':author', $this->author, PDO::PARAM_STR);
         $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
     
-        // Execute query
         if ($stmt->execute()) {
             return true;
         }
         return false;
     }
 
-    // Delete Author
+    // Delete 
     public function delete() {
-        // Create query
+       
         $query = 'DELETE FROM ' . $this->table . ' WHERE id = :id';
-    
-        // Prepare statement
+       
         $stmt = $this->conn->prepare($query);
     
-        // Clean data
         $this->id = htmlspecialchars(strip_tags($this->id));
     
-        // Bind data
         $stmt->bindParam(':id', $this->id, PDO::PARAM_INT);
-    
-        // Execute query
+  
         if ($stmt->execute()) {
             return true;
         }

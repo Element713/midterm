@@ -1,5 +1,4 @@
 version: '3.7'
-
 services:
   php-apache:
     build:
@@ -17,7 +16,6 @@ services:
       - PASSWORD=${PASSWORD}
     depends_on:
       - postgres
-
   postgres:
     image: postgres:latest
     environment:
